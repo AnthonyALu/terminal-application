@@ -25,7 +25,8 @@ class GameController
         registerPrompt = TTY::Prompt.new
         username = registerPrompt.ask("What is your name?", default: "Anonymous")
             if @userHashes[username]
-                puts "stop"
+                puts "You already have an account, please login"
+                start_screen
             else
                 user = User.new(username, 0)
                 newHash = user.user_details
@@ -33,7 +34,6 @@ class GameController
                 puts "Thank you for registering, please login and have fun!"
                 start_screen
             end
-            show_users
     end
 
     def user_login
@@ -61,7 +61,7 @@ class GameController
 
     def home_screen
         entryPrompt = TTY::Prompt.new
-        entryChoices = {Play: 1, Stats: 2, "Change User": 3}
+        entryChoices = {Play: 1, Stats: 2, "Log out": 3}
         choice = entryPrompt.select("Hello #{@currentUser}, what would you like to do?", entryChoices)
         if choice == 1
 
@@ -70,7 +70,7 @@ class GameController
             puts show_stats
             home_screen
         else
-            show_users
+            start_screen
         end
     end
 
