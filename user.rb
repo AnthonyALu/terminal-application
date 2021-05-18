@@ -1,5 +1,5 @@
 require "tty-progressbar"
-require_relative "database.rb"
+require_relative "game_controller.rb"
 
 class User
     attr_reader :name, :highScore
