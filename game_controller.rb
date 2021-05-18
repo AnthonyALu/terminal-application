@@ -1,10 +1,13 @@
+require "random-word"
+require 'timers'
 
 class GameController
 
-    attr_accessor :userHashes
-    attr_accessor :currentUser
+    attr_accessor :userHashes, :currentUser
+    attr_reader :gameFinished
     def initialize()
     @@userHashes = {}
+    @wordsLeft = 0
     end
 
     def start_screen()
@@ -75,10 +78,10 @@ class GameController
     end
 
     def start_game
-        secondsPrompt = TTY::Prompt.new
-        seconds = secondsPrompt.ask("How long do you want to type for? (enter a number between 15-300)", default: 60)
-        if seconds.to_i < 15 || seconds.to_i > 300
-            puts "Invalid entry, please enter a number between 15 to 300"
+        wordsPrompt = TTY::Prompt.new
+        words = wordsPrompt.ask("How many words do you want to type? (enter a number)", default: 100)
+        if words.to_i < 1
+            puts "Invalid entry, please enter a number larger than 0"
             start_game
         else
             countdown = 3
@@ -87,11 +90,38 @@ class GameController
             countdown -= 1
             sleep 1
             end
-            begin_typing
+            begin_typing(words)
         end
     end
 
-    def begin_typing
-        puts "hey"
+
+    def begin_typing(wordCount)
+        starting = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+        @wordsLeft = wordCount.to_i #words left to type are the words passed in argument from previous def
+        while @wordsLeft > 0
+            newWord = RandomWord.noun.next
+            while newWord.size > 8 #makes sure no words are over 8 characters long
+                random = rand (2)
+                if rand == 1
+                    newWord = RandomWord.adjs.next
+                else
+                    newWord = RandomWord.noun.next
+                end
+            end
+            puts newWord
+            input = gets.chomp
+            if newWord == input
+                puts "nice"
+            else
+                puts "u suk"
+            end
+            @wordsLeft -= 1
+        end
+        elapsed = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+        finalTime = (elapsed - starting).round
+        puts finalTime
+    end
+
+    def calculate_results(finalTime)
     end
 end
