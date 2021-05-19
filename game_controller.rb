@@ -1,5 +1,6 @@
 require "random-word"
 require 'timers'
+require 'colorize'
 
 class GameController
 
@@ -79,9 +80,9 @@ class GameController
 
     def start_game
         wordsPrompt = TTY::Prompt.new
-        words = wordsPrompt.ask("How many words do you want to type? (enter a number)", default: 100)
-        if words.to_i < 1
-            puts "Invalid entry, please enter a number larger than 0"
+        words = wordsPrompt.ask("How many words do you want to type? (enter a number between 5 and 500)", default: 100)
+        if words.to_i < 5 || words.to_i > 499
+            puts "Invalid entry, please enter a number larger than 5 and smaller than 500"
             start_game
         else
             countdown = 3
@@ -96,32 +97,71 @@ class GameController
 
 
     def begin_typing(wordCount)
+        wordsCorrect = []
+        wordsIncorrect = []
         starting = Process.clock_gettime(Process::CLOCK_MONOTONIC)
         @wordsLeft = wordCount.to_i #words left to type are the words passed in argument from previous def
         while @wordsLeft > 0
-            newWord = RandomWord.noun.next
+            newWord = RandomWord.nouns.next
             while newWord.size > 8 #makes sure no words are over 8 characters long
                 random = rand (2)
                 if rand == 1
                     newWord = RandomWord.adjs.next
                 else
-                    newWord = RandomWord.noun.next
+                    newWord = RandomWord.nouns.next
                 end
             end
             puts newWord
             input = gets.chomp
             if newWord == input
-                puts "nice"
+                wordsCorrect << newWord.colorize(:green)
             else
-                puts "u suk"
+                wordsIncorrect << newWord.colorize(:red)
             end
             @wordsLeft -= 1
         end
         elapsed = Process.clock_gettime(Process::CLOCK_MONOTONIC)
-        finalTime = (elapsed - starting).round
-        puts finalTime
+        finalTime = (elapsed - starting)
+        calculate_results(finalTime, wordCount, wordsCorrect, wordsIncorrect)
     end
 
-    def calculate_results(finalTime)
+    def calculate_results(finalTime, totalWordCount, wordsCorrect, wordsIncorrect)
+        puts "Your final time to type #{totalWordCount} was #{finalTime.round} seconds"
+        puts "Words typed correctly: #{wordsCorrect.join(" ")}"
+        puts "Words typed incorrectly: #{wordsIncorrect.join(" ")}"
+        puts "Calculating..."
+        calculate_speed(finalTime, totalWordCount, wordsCorrect)
+
+    end
+
+    def count_letters(input)
+        letter_count = {}
+        downcase_letters = input.delete(' ').split("")
+        downcase_letters.each do |letter|
+        p letter
+        if !letter_count[letter]
+            letter_count[letter] = 1
+            else
+            letter_count[letter] += 1
+            end
+        end
+        # Populate letter_count using an iterator 
+        return letter_count
+    end
+
+    def calculate_speed(finalTime, totalWordCount, wordsCorrect)
+        charactersTyped = 0
+        wordsCorrect.each do |word|
+            word = word.green.uncolorize
+            puts word.size
+            charactersTyped += word.size
+        end
+        timeMultiplier = 60 / finalTime 
+        puts timeMultiplier
+        puts charactersTyped
+        wordsNormalized = charactersTyped * timeMultiplier
+        wpm = ((wordsNormalized / 2.5)).round 
+        puts "You type #{wpm.to_s.colorize(:green)} word(s) per minute!"
+
     end
 end
