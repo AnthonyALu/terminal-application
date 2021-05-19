@@ -76,17 +76,16 @@ class GameController
     end
 
     def home_screen
-        entryPrompt = TTY::Prompt.new
-        entryChoices = {Play: 1, Stats: 2, "Log out": 3}
-        choice = entryPrompt.select("Hello #{@currentUser}, what would you like to do?", entryChoices)
-        if choice == 1
-            start_game
-        elsif
-            choice == 2
-            puts show_stats
-            home_screen
+        entryPrompt = TTY::Prompt.new #creates new prompt
+        entryChoices = {Play: 1, Stats: 2, "Log out": 3} #options to choose from
+        choice = entryPrompt.select("Hello #{@currentUser}, what would you like to do?", entryChoices) #receives choice input
+        if choice == 1 #play game selected
+            start_game #starts game
+        elsif choice == 2 #stats selected
+            puts show_stats #show user stats
+            home_screen #restart method
         else
-            start_screen
+            start_screen #logs out
         end
     end
 
