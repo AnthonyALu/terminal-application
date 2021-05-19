@@ -12,16 +12,17 @@ class GameController
     end
 
     def start_screen()
-        startChoices = {Login: 1, "New User": 2, Leaderboards: 3}
+        startChoices = {Login: 1, "New User": 2, Leaderboards: 3, Exit: 4}
         startPrompt = TTY::Prompt.new
         choice = startPrompt.select("Welcome to Type Champion", startChoices) 
             if choice == 1
                 user_login
-            elsif
-                choice == 2
+            elsif choice == 2
                 user_register
-            else
+            elsif choice == 3
                 show_users
+            else
+            puts "Thank you for playing!"   
             end
     end
 
