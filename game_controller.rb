@@ -1,12 +1,13 @@
 require "random-word"
 require 'colorize'
+require "tty-prompt"
 
 class GameController
 
     attr_accessor :userHashes, :currentUser
     attr_reader :gameFinished
     def initialize()
-    @@userHashes = {}
+    @userHashes = {}
     @wordsLeft = 0
     end
 
@@ -27,22 +28,25 @@ class GameController
     def user_register
         registerPrompt = TTY::Prompt.new
         username = registerPrompt.ask("What is your name?", default: "Anonymous")
-            if @@userHashes[username]
-                puts "You already have an account, please login"
-                start_screen
-            else
-                user = User.new(username, 0)
-                newHash = user.user_details
-                @@userHashes.merge!(newHash)
-                puts "Thank you for registering, please login and have fun!"
-                start_screen
-            end
+        puts attempt_registration(username)
+        start_screen
+    end
+
+    def attempt_registration(username)
+        if @userHashes[username]
+            return "You already have an account, please login"
+        else
+            user = User.new(username, 0)
+            newHash = user.user_details
+            @userHashes.merge!(newHash)
+            return "Thank you for registering, please login and have fun!"
+        end
     end
 
     def user_login
         loginPrompt = TTY::Prompt.new
         username = loginPrompt.ask("What is your name?", default: "Anonymous")
-            if @@userHashes[username]
+            if @userHashes[username]
                 @currentUser = username
                 home_screen
             else
@@ -52,13 +56,13 @@ class GameController
     end
 
     def show_users
-        @@userHashes.each do |user|
+        @userHashes.each do |user|
             puts user
         end
     end
 
     def show_stats()
-        return @@userHashes[@currentUser]
+        return @userHashes[@currentUser]
         return @currentUser
     end
 
