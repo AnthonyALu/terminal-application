@@ -1,16 +1,16 @@
-require "tty-progressbar"
-require_relative "game_controller.rb"
-
 class User
-    attr_reader :name, :highScore
+    attr_reader :name, :uid, :userCount
+    @@userCount = 0
     
-    def initialize(name, highScore)
+    def initialize(name)
         @name = name
-        @highScore = 0
+        @uid = @@userCount
+        @@userCount +=1
+        puts @@userCount
     end
 
     def user_details()
-        return {@name => @highScore}
+        return {@name => @uid}
     end
 
 end
