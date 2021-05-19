@@ -1,5 +1,4 @@
 require "random-word"
-require 'timers'
 require 'colorize'
 
 class GameController
