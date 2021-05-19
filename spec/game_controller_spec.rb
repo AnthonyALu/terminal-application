@@ -33,4 +33,20 @@ describe GameController do
         expect(@controller.attempt_registration("bob")). to eq("Thank you for registering, please login and have fun!")
     end
 
+    it "should allow users to login if name exists" do
+        expect(@controller.attempt_login("Bob")). to eq("Hello Bob!")
+    end
+
+    it "should allow users to login if name exists" do
+        expect(@controller.attempt_login("Steve")). to eq("Hello Steve!")
+    end
+
+    it "should stops users from logging in if name exists" do
+        expect(@controller.attempt_login("bob")). to eq("You have not registered yet, please register first.")
+    end
+
+    it "should stops users from logging in if name exists" do
+        expect(@controller.attempt_login("alex")). to eq("You have not registered yet, please register first.")
+    end
+
 end

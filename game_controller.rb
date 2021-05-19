@@ -46,13 +46,21 @@ class GameController
     def user_login
         loginPrompt = TTY::Prompt.new
         username = loginPrompt.ask("What is your name?", default: "Anonymous")
+        puts(attempt_login(username))
             if @userHashes[username]
-                @currentUser = username
                 home_screen
             else
-                puts "You have not registered yet, please register first."
                 start_screen
             end
+    end
+
+    def attempt_login(username)
+        if @userHashes[username]
+            @currentUser = username
+            return "Hello #{username}!"
+        else
+            return "You have not registered yet, please register first."
+        end 
     end
 
     def show_users
