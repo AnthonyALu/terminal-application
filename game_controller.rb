@@ -26,19 +26,19 @@ class GameController
     end
 
     def user_register
-        registerPrompt = TTY::Prompt.new
-        username = registerPrompt.ask("What is your name?", default: "Anonymous")
-        puts attempt_registration(username)
-        start_screen
+        registerPrompt = TTY::Prompt.new #create new prompt
+        username = registerPrompt.ask("What is your name?", default: "Anonymous") #ask for user name, default is 'anonymous'
+        puts attempt_registration(username) #calls attempt_registration method with username to check if user exists
+        start_screen #return to start screen so user can login
     end
 
     def attempt_registration(username)
-        if @userHashes[username]
+        if @userHashes[username] #check if user exists in @userHashes
             return "You already have an account, please login"
         else
-            user = User.new(username, 0)
-            newHash = user.user_details
-            @userHashes.merge!(newHash)
+            user = User.new(username, 0) #creates new user
+            newHash = user.user_details #creates a new hash of user values
+            @userHashes.merge!(newHash) #adds user to hash
             return "Thank you for registering, please login and have fun!"
         end
     end
