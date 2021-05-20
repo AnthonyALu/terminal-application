@@ -141,17 +141,18 @@ class GameController
     end
 
     def calculate_results(elapsedTime, totalWordCount, wordsCorrect, wordsIncorrect)
-        puts "Your final time to type #{totalWordCount} words was #{finalTime.round} seconds" #tells the user how long it took them to type the designated words
+        puts "Your final time to type #{totalWordCount} words was #{elapsedTime.round} seconds" #tells the user how long it took them to type the designated words
         puts "Words typed correctly: #{wordsCorrect.join(" ")}" #shows all correctly typed words seperated by a space
         puts "Words typed incorrectly: #{wordsIncorrect.join(" ")}" #shows all incorrectly typed words seperated by a space
         puts "Calculating..."
-        calculate_speed(elapsedTime, totalWordCount, wordsCorrect) #returns wpm and accuracy
-        puts count_letters(incorrectWords)
+        puts calculate_speed(elapsedTime, totalWordCount, wordsCorrect) #returns wpm and accuracy
+        puts count_worst_letters(wordsIncorrect)
     end
 
-    def count_letters(incorrectWords)
+    def count_worst_letters(incorrectWords)
         letter_count = {}
         incorrectWords.each do |word|
+            word = word.red.uncolorize
             letterArr = word.split("")
             letterArr.each do |letter|
                 if !letter_count[letter]
@@ -161,25 +162,26 @@ class GameController
                 end
             end
         end
-
-        
-        # Populate letter_count using an iterator 
-        return letter_count
+        if letter_count.empty?
+            return "Great job, you got all the words correct!"
+        else
+            final_letters = letter_count.sort_by {|char, c| c}.reverse
+            return "Here are some characters that you may want to practice: #{final_letters[0]}, #{final_letters[1]}, #{final_letters[2]}"
+        end
     end
 
     def calculate_speed(elapsedTime, totalWordCount, wordsCorrect)
-        charactersTyped = 0
+        charactersTyped = 0 #checks how many characters were typed
         wordsCorrect.each do |word|
-            word = word.green.uncolorize
-            puts word.size
-            charactersTyped += word.size
+            word = word.green.uncolorize #uncolorizes words so that word size will revert to normal
+            charactersTyped += word.size #adds characters of words to character count
         end
-        timeMultiplier = 60 / finalTime 
-        puts timeMultiplier
-        puts charactersTyped
-        wordsNormalized = charactersTyped * timeMultiplier
-        wpm = ((wordsNormalized / 2.5)).round 
-        puts "You type #{wpm.to_s.colorize(:green)} word(s) per minute!"
+        timeMultiplier = 60 / elapsedTime  #creates a multiplier to set typing rate to words per minute
+        wordsNormalized = charactersTyped * timeMultiplier #converts characters typed to characters per minute
+        wpm = ((wordsNormalized / 3)).round #wpm = characters typed per minute divided by average characters in words. Average is lower to be more accurate because user has to use the enter button and is not typing sentences
+        accuracy = (wordsCorrect.count/totalWordCount.to_i) * 100 #accuracy = correct words / total words
+    
+        return "You type #{wpm.to_s.colorize(:green)} word(s) per minute with #{accuracy}% accuracy!" #returns wpm and accuracy
 
     end
 end
