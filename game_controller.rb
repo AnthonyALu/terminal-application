@@ -5,26 +5,24 @@ require "tty-prompt"
 class GameController
 
     attr_accessor :userHashes, :currentUid, :currentUserData, :userData
-    attr_reader :gameFinished
     def initialize()
-    @userData = []
-    @userHashes = {}
-    @currentUserData = {}
-    @wordsLeft = 0
-    @currentUid = 0
+    @userData = [] #database of user hashes
+    @userHashes = {} #stores indexes for all users
+    @currentUserData = {} #stores current stats
+    @currentUid = 0 #current user id
     end
 
     def start_screen()
-        startChoices = {Login: 1, "New User": 2, Leaderboards: 3, Exit: 4}
-        startPrompt = TTY::Prompt.new
-        choice = startPrompt.select("Welcome to Type Champion", startChoices) 
-            if choice == 1
+        startChoices = {Login: 1, "New User": 2, Leaderboards: 3, Exit: 4} #Options for starting screen
+        startPrompt = TTY::Prompt.new #creates new prompt
+        choice = startPrompt.select("Welcome to Type Champion", startChoices) #receive input for prompt
+            if choice == 1 #user picked Login
                 user_login
-            elsif choice == 2
+            elsif choice == 2 #user picked New User
                 user_register
-            elsif choice == 3
+            elsif choice == 3 #user picked Leaderboards
                 show_users
-            else
+            else #user picked exit
             puts "Thank you for playing!"   
             end
     end
@@ -49,20 +47,20 @@ class GameController
     end
 
     def user_login
-        loginPrompt = TTY::Prompt.new
-        username = loginPrompt.ask("What is your name?", default: "Anonymous")
-        puts(attempt_login(username))
-            if @userHashes[username]
-                home_screen
-            else
-                start_screen
-            end
+        loginPrompt = TTY::Prompt.new #creates new prompt
+        username = loginPrompt.ask("What is your name?", default: "Anonymous") #receive prompt input
+        puts(attempt_login(username)) #attempt to login 
+        if @userHashes[username]
+            home_screen #if user exists go to home screen
+        else
+            start_screen #otherwise go back to start screen
+        end
     end
 
     def attempt_login(username)
-        if @userHashes[username]
-            @currentUid = @userHashes[username]
-            @currentUserData = @userData[currentUid]
+        if @userHashes[username] #check if user exists
+            @currentUid = @userHashes[username] #update current user id to the username from the userhashes directory
+            @currentUserData = @userData[currentUid] #user data hash becomes hash from database
             return "Hello #{currentUserData[:name]}!"
         else
             return "You have not registered yet, please register first."
@@ -76,7 +74,7 @@ class GameController
     end
 
     def show_stats()
-        @currentUserData = @userData[@currentUid]
+        @currentUserData = @userData[@currentUid] #double check that the stats shown are the highest/used for testing
         return "Name: #{@currentUserData[:name]}, WPM: #{@currentUserData[:high_score]}, Accuracy: #{@currentUserData[:accuracy]}, Least accurate letter: #{@currentUserData[:worst_character]}"
     end
 
@@ -115,8 +113,8 @@ class GameController
         wordsCorrect = [] #creates array of words that the user types correctly
         wordsIncorrect = [] #creates array of words that the user types incorrectly
         startingTime = Process.clock_gettime(Process::CLOCK_MONOTONIC) #gets current time and saves it in variable
-        @wordsLeft = wordCount.to_i #words left to type are the words passed in argument from previous def
-        while @wordsLeft > 0 #loops while there are words to type
+        wordsLeft = wordCount.to_i #words left to type are the words passed in argument from previous def
+        while wordsLeft > 0 #loops while there are words to type
             newWord = RandomWord.nouns.next #starts with a random noun
             while newWord.size > 8 #makes sure no words are over 8 characters long, generates a new word if the new word is longer than 8 characters
                 random = rand(2) #generators a random number from 0-1
@@ -133,7 +131,7 @@ class GameController
             else
                 wordsIncorrect << newWord.colorize(:red) #changes colour of word to red and pushes it to incorrect words array
             end
-            @wordsLeft -= 1 #user has typed another word
+            wordsLeft -= 1 #user has typed another word
         end
         finishTime = Process.clock_gettime(Process::CLOCK_MONOTONIC) #gets current time and stores it in variable
         elapsedTime = (finishTime - startingTime) #gets time elapsed by subtracting starting time from the finished time
@@ -146,28 +144,28 @@ class GameController
         puts "Words typed incorrectly: #{wordsIncorrect.join(" ")}" #shows all incorrectly typed words seperated by a space
         puts "Calculating..."
         puts calculate_speed(elapsedTime, totalWordCount, wordsCorrect) #returns wpm and accuracy
-        puts count_worst_letters(wordsIncorrect)
-        home_screen
+        puts count_worst_letters(wordsIncorrect) #returns array of top 3 incorrect letters typed
+        home_screen #return to home screen
     end
 
     def count_worst_letters(incorrectWords)
-        letter_count = {}
-        incorrectWords.each do |word|
-            word = word.red.uncolorize
-            letterArr = word.split("")
-            letterArr.each do |letter|
-                if !letter_count[letter]
+        letter_count = {} #create new array of letters incorrectly typed
+        incorrectWords.each do |word| #loop through each word
+            word = word.red.uncolorize #uncolorize to remove colorize characters
+            letterArr = word.split("") #split word into array of letters
+            letterArr.each do |letter| #loop through each letter
+                if !letter_count[letter] #if letter does not exist in hash, add it to hash
                     letter_count[letter] = 1
                     else
-                    letter_count[letter] += 1
+                    letter_count[letter] += 1 #if letter exists, increment
                 end
             end
         end
-        if letter_count.empty?
+        if letter_count.empty? #check if hash is empty, meaning that they got everything correct
             return "Great job, you got all the words correct!"
         else
-            final_letters = letter_count.sort_by {|char, c| c}.reverse
-            @currentUserData[:worst_character] = letter_count.max_by{|k, v| v}
+            final_letters = letter_count.sort_by {|char, c| c}.reverse #sort hash by descending order
+            @currentUserData[:worst_character] = letter_count.max_by{|k, v| v} #change worst character in database to be the key with the highest value
             return "Here are some characters that you may want to practice: #{final_letters[0]}, #{final_letters[1]}, #{final_letters[2]}"
         end
     end
@@ -191,10 +189,12 @@ class GameController
 
     def save_data(wpm, accuracy)
         if wpm > @currentUserData[:high_score]
-            @currentUserData[:high_score] = wpm
-            @currentUserData[:accuracy] = accuracy
-            @userData[currentUid] = @currentUserData
+            #save data if user reaches new high score
+            @currentUserData[:high_score] = wpm #updates highest wpm
+            @currentUserData[:accuracy] = accuracy #updates accuracy
+            @userData[currentUid] = @currentUserData #updates database with current user data
         else
+            #do not save data
         end
     end
 end
