@@ -21,7 +21,7 @@ class GameController
             elsif choice == 2 #user picked New User
                 user_register
             elsif choice == 3 #user picked Leaderboards
-                show_users
+                show_leaderboards
             else #user picked exit
             puts "Thank you for playing!"   
             end
@@ -67,10 +67,16 @@ class GameController
         end 
     end
 
-    def show_users
-        @userHashes.each do |user|
-            puts user
+    def show_leaderboards
+        leaderboardArr = @userData
+        leaderboardArr.sort_by!{|w| w[:high_score]}
+        leaderboardArr = leaderboardArr.reverse
+        leaderCount = 0
+        while leaderCount < 3
+            puts "#{leaderCount}. #{leaderboardArr[leaderCount]} -"
+            leaderCount +=1
         end
+        start_screen
     end
 
     def show_stats()
