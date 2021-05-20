@@ -147,6 +147,7 @@ class GameController
         puts "Calculating..."
         puts calculate_speed(elapsedTime, totalWordCount, wordsCorrect) #returns wpm and accuracy
         puts count_worst_letters(wordsIncorrect)
+        home_screen
     end
 
     def count_worst_letters(incorrectWords)
@@ -166,6 +167,7 @@ class GameController
             return "Great job, you got all the words correct!"
         else
             final_letters = letter_count.sort_by {|char, c| c}.reverse
+            @currentUserData[:worst_character] = letter_count.max_by{|k, v| v}
             return "Here are some characters that you may want to practice: #{final_letters[0]}, #{final_letters[1]}, #{final_letters[2]}"
         end
     end
@@ -179,9 +181,20 @@ class GameController
         timeMultiplier = 60 / elapsedTime  #creates a multiplier to set typing rate to words per minute
         wordsNormalized = charactersTyped * timeMultiplier #converts characters typed to characters per minute
         wpm = ((wordsNormalized / 3)).round #wpm = characters typed per minute divided by average characters in words. Average is lower to be more accurate because user has to use the enter button and is not typing sentences
-        accuracy = (wordsCorrect.count/totalWordCount.to_i) * 100 #accuracy = correct words / total words
-    
-        return "You type #{wpm.to_s.colorize(:green)} word(s) per minute with #{accuracy}% accuracy!" #returns wpm and accuracy
+        puts wordsCorrect.count
+        puts totalWordCount
+        accuracy = (wordsCorrect.count.to_f / totalWordCount.to_f) * 100 #accuracy = correct words / total words
+        puts accuracy
+        save_data(wpm, accuracy.to_i) #saves data if user has reached high score
+        return "You type #{wpm.to_s.colorize(:green)} word(s) per minute with #{accuracy.to_i}% accuracy!" #returns wpm and accuracy
+    end
 
+    def save_data(wpm, accuracy)
+        if wpm > @currentUserData[:high_score]
+            @currentUserData[:high_score] = wpm
+            @currentUserData[:accuracy] = accuracy
+            @userData[currentUid] = @currentUserData
+        else
+        end
     end
 end
