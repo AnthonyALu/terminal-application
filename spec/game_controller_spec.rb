@@ -1,20 +1,23 @@
 require_relative "../user.rb"
-
+require_relative "../game_controller.rb"
 
 describe GameController do
     before(:each) do
         @controller = GameController.new()
-        @controller.currentUser = "Bob"
-        @controller.userHashes = {"Bob" => 10, "Steve" => 5}
+        @controller.currentUid = 0
+        @controller.userHashes = {"Bob" => 0, "Steve" => 1}
+        @controller.userData << {:name => "Bob", :high_score => 0, :accuracy => 0, :worst_character => "None!"}
+        @controller.userData << {:name => "Steve", :high_score => 0, :accuracy => 0, :worst_character => "None!"}
+        @controller.currentUserData = @controller.userData[0]
     end
 
     it "should show stats" do
-        expect(@controller.show_stats).to eq(10)
+        expect(@controller.show_stats).to eq("Name: Bob, WPM: 0, Accuracy: 0, Least accurate letter: None!")
     end
 
     it "should show stats for other users in hash" do
-        @controller.currentUser = "Steve"
-        expect(@controller.show_stats).to eq(5) 
+        @controller.currentUid = 1
+        expect(@controller.show_stats).to eq("Name: Steve, WPM: 0, Accuracy: 0, Least accurate letter: None!")
     end
 
     it "should stop users from registering if name already exists" do

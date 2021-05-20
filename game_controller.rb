@@ -4,7 +4,7 @@ require "tty-prompt"
 
 class GameController
 
-    attr_accessor :userHashes, :currentUid, :currentUserData
+    attr_accessor :userHashes, :currentUid, :currentUserData, :userData
     attr_reader :gameFinished
     def initialize()
     @userData = []
@@ -43,7 +43,7 @@ class GameController
             user = User.new(username) #creates new user
             newHash = user.user_details #creates a new hash of user values
             @userHashes.merge!(newHash) #adds user to hash
-            @userData << {:name => username, :high_score => 0, :accuracy => 0, :worst_characters => ["a", "b", "c"]}
+            @userData << {:name => username, :high_score => 0, :accuracy => 0, :worst_character => "None!"}
             return "Thank you for registering, please login and have fun!"
         end
     end
@@ -76,8 +76,8 @@ class GameController
     end
 
     def show_stats()
-        return @userHashes[@currentUser]
-        return @currentUid
+        @currentUserData = @userData[@currentUid]
+        return "Name: #{@currentUserData[:name]}, WPM: #{@currentUserData[:high_score]}, Accuracy: #{@currentUserData[:accuracy]}, Least accurate letter: #{@currentUserData[:worst_character]}"
     end
 
     def home_screen
