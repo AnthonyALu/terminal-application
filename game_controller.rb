@@ -141,11 +141,11 @@ class GameController
     end
 
     def calculate_results(elapsedTime, totalWordCount, wordsCorrect, wordsIncorrect)
-        puts "Your final time to type #{totalWordCount} was #{finalTime.round} seconds"
-        puts "Words typed correctly: #{wordsCorrect.join(" ")}"
-        puts "Words typed incorrectly: #{wordsIncorrect.join(" ")}"
+        puts "Your final time to type #{totalWordCount} words was #{finalTime.round} seconds" #tells the user how long it took them to type the designated words
+        puts "Words typed correctly: #{wordsCorrect.join(" ")}" #shows all correctly typed words seperated by a space
+        puts "Words typed incorrectly: #{wordsIncorrect.join(" ")}" #shows all incorrectly typed words seperated by a space
         puts "Calculating..."
-        calculate_speed(elapsedTime, totalWordCount, wordsCorrect)
+        calculate_speed(elapsedTime, totalWordCount, wordsCorrect) #returns wpm and accuracy
         puts count_letters(incorrectWords)
     end
 
@@ -158,7 +158,6 @@ class GameController
                     letter_count[letter] = 1
                     else
                     letter_count[letter] += 1
-                    
                 end
             end
         end
