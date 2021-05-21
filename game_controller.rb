@@ -61,9 +61,6 @@ class GameController
     def attempt_login(username)
         if @userHashes[username] #check if user exists
             @currentUid = @userHashes[username] #update current user id to the username from the userhashes directory
-            puts @currentUid
-            puts @userhashes
-            puts @userData
             @currentUserData = @userData[currentUid] #user data hash becomes hash from database
             return "Hello #{currentUserData[:name]}!"
         else
@@ -78,29 +75,23 @@ class GameController
             @leaderboardArr = @leaderboardArr.reverse
             leaderCount = @leaderboardArr.count
             if leaderCount > 2
-                leaderCount = 0
-                while leaderCount < 3
-                    leaderHash = @leaderboardArr[leaderCount]
-                    puts "#{leaderCount+1}. #{leaderHash[:name]} - WPM: #{leaderHash[:high_score]}, Accuracy: #{leaderHash[:accuracy]}, Worst Character: #{leaderHash[:worst_character]}"
-                    leaderCount +=1
-                end
-            elsif leaderCount == 2
-                leaderCount = 0
-                while leaderCount < 2
-                    leaderHash = @leaderboardArr[leaderCount]
-                    puts "#{leaderCount+1}. #{leaderHash[:name]} - WPM: #{leaderHash[:high_score]}, Accuracy: #{leaderHash[:accuracy]}, Worst Character: #{leaderHash[:worst_character]}"
-                    leaderCount +=1
-                end
+                    display_leaders(3)
             else
-                #leaderCount == 1
-                leaderCount =0
-                leaderHash = @leaderboardArr[leaderCount-1]
-                puts "#{leaderCount+1}. #{leaderHash[:name]} - WPM: #{leaderHash[:high_score]}, Accuracy: #{leaderHash[:accuracy]}, Worst Character: #{leaderHash[:worst_character]}"
+                display_leaders(leaderCount)
             end
         else
             puts "No entries yet!"
         end
         start_screen
+    end
+
+    def display_leaders(leaderCount)
+        leaders = 0
+        while leaders < leaderCount
+        leaderHash = @leaderboardArr[leaders]
+        puts "#{leaders+1}. #{leaderHash[:name]} - WPM: #{leaderHash[:high_score]}, Accuracy: #{leaderHash[:accuracy]}, Worst Character: #{leaderHash[:worst_character]}"
+        leaders += 1
+        end
     end
 
     def show_stats()
@@ -209,10 +200,7 @@ class GameController
         timeMultiplier = 60 / elapsedTime  #creates a multiplier to set typing rate to words per minute
         wordsNormalized = charactersTyped * timeMultiplier #converts characters typed to characters per minute
         wpm = ((wordsNormalized / 3)).round #wpm = characters typed per minute divided by average characters in words. Average is lower to be more accurate because user has to use the enter button and is not typing sentences
-        puts wordsCorrect.count
-        puts totalWordCount
         accuracy = (wordsCorrect.count.to_f / totalWordCount.to_f) * 100 #accuracy = correct words / total words
-        puts accuracy
         save_data(wpm, accuracy.to_i) #saves data if user has reached high score
         return "You type #{wpm.to_s.colorize(:green)} word(s) per minute with #{accuracy.to_i}% accuracy!" #returns wpm and accuracy
     end
@@ -223,7 +211,6 @@ class GameController
             @currentUserData[:high_score] = wpm #updates highest wpm
             @currentUserData[:accuracy] = accuracy #updates accuracy
             @userData[@currentUid] = @currentUserData #updates database with current user data
-            puts @userData
         else
             #do not save data
         end
