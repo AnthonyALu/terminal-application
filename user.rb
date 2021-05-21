@@ -6,7 +6,6 @@ class User
         @name = name
         @uid = @@userCount
         @@userCount +=1
-        puts @@userCount
     end
 
     def user_details()

@@ -10,6 +10,7 @@ class GameController
     @userHashes = {} #stores indexes for all users
     @currentUserData = {} #stores current stats
     @currentUid = 0 #current user id
+    @leaderboardArr = []
     end
 
     def start_screen()
@@ -40,7 +41,7 @@ class GameController
         else
             user = User.new(username) #creates new user
             newHash = user.user_details #creates a new hash of user values
-            @userHashes.merge!(newHash) #adds user to hash
+            @userhashes = @userHashes.merge!(newHash) #adds user to hash 
             @userData << {:name => username, :high_score => 0, :accuracy => 0, :worst_character => "None!"}
             return "Thank you for registering, please login and have fun!"
         end
@@ -60,6 +61,9 @@ class GameController
     def attempt_login(username)
         if @userHashes[username] #check if user exists
             @currentUid = @userHashes[username] #update current user id to the username from the userhashes directory
+            puts @currentUid
+            puts @userhashes
+            puts @userData
             @currentUserData = @userData[currentUid] #user data hash becomes hash from database
             return "Hello #{currentUserData[:name]}!"
         else
@@ -68,13 +72,33 @@ class GameController
     end
 
     def show_leaderboards
-        leaderboardArr = @userData
-        leaderboardArr.sort_by!{|w| w[:high_score]}
-        leaderboardArr = leaderboardArr.reverse
-        leaderCount = 0
-        while leaderCount < 3
-            puts "#{leaderCount}. #{leaderboardArr[leaderCount]} -"
-            leaderCount +=1
+        @leaderboardArr = @userData.dup
+        if @leaderboardArr.count > 0
+            @leaderboardArr.sort_by!{|w| w[:high_score]}
+            @leaderboardArr = @leaderboardArr.reverse
+            leaderCount = @leaderboardArr.count
+            if leaderCount > 2
+                leaderCount = 0
+                while leaderCount < 3
+                    leaderHash = @leaderboardArr[leaderCount]
+                    puts "#{leaderCount+1}. #{leaderHash[:name]} - WPM: #{leaderHash[:high_score]}, Accuracy: #{leaderHash[:accuracy]}, Worst Character: #{leaderHash[:worst_character]}"
+                    leaderCount +=1
+                end
+            elsif leaderCount == 2
+                leaderCount = 0
+                while leaderCount < 2
+                    leaderHash = @leaderboardArr[leaderCount]
+                    puts "#{leaderCount+1}. #{leaderHash[:name]} - WPM: #{leaderHash[:high_score]}, Accuracy: #{leaderHash[:accuracy]}, Worst Character: #{leaderHash[:worst_character]}"
+                    leaderCount +=1
+                end
+            else
+                #leaderCount == 1
+                leaderCount =0
+                leaderHash = @leaderboardArr[leaderCount-1]
+                puts "#{leaderCount+1}. #{leaderHash[:name]} - WPM: #{leaderHash[:high_score]}, Accuracy: #{leaderHash[:accuracy]}, Worst Character: #{leaderHash[:worst_character]}"
+            end
+        else
+            puts "No entries yet!"
         end
         start_screen
     end
@@ -198,7 +222,8 @@ class GameController
             #save data if user reaches new high score
             @currentUserData[:high_score] = wpm #updates highest wpm
             @currentUserData[:accuracy] = accuracy #updates accuracy
-            @userData[currentUid] = @currentUserData #updates database with current user data
+            @userData[@currentUid] = @currentUserData #updates database with current user data
+            puts @userData
         else
             #do not save data
         end
