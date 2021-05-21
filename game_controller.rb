@@ -17,15 +17,15 @@ class GameController
         startChoices = {Login: 1, "New User": 2, Leaderboards: 3, Exit: 4} #Options for starting screen
         startPrompt = TTY::Prompt.new #creates new prompt
         choice = startPrompt.select("Welcome to Type Champion", startChoices) #receive input for prompt
-            if choice == 1 #user picked Login
-                user_login
-            elsif choice == 2 #user picked New User
-                user_register
-            elsif choice == 3 #user picked Leaderboards
-                show_leaderboards
-            else #user picked exit
+        if choice == 1 #user picked Login
+            user_login
+        elsif choice == 2 #user picked New User
+             user_register
+        elsif choice == 3 #user picked Leaderboards
+            show_leaderboards
+        else #user picked exit
             puts "Thank you for playing!"   
-            end
+        end
     end
 
     def user_register
@@ -69,28 +69,28 @@ class GameController
     end
 
     def show_leaderboards
-        @leaderboardArr = @userData.dup
-        if @leaderboardArr.count > 0
-            @leaderboardArr.sort_by!{|w| w[:high_score]}
-            @leaderboardArr = @leaderboardArr.reverse
-            leaderCount = @leaderboardArr.count
+        @leaderboardArr = @userData.dup #creates a new duplicate array of all user data
+        if @leaderboardArr.count > 0 #checks if array of users 
+            @leaderboardArr.sort_by!{|w| w[:high_score]} #sort by ascending order
+            @leaderboardArr = @leaderboardArr.reverse #reverse order to descending
+            leaderCount = @leaderboardArr.count #checks how many users are in the array
             if leaderCount > 2
-                    display_leaders(3)
+                display_leaders(3) #shows a maximum of 3 leaders
             else
-                display_leaders(leaderCount)
+                display_leaders(leaderCount) #calls method based on number of users
             end
         else
-            puts "No entries yet!"
+            puts "No entries yet!" #no users in data
         end
-        start_screen
+        start_screen #return to starting screen
     end
 
     def display_leaders(leaderCount)
-        leaders = 0
-        while leaders < leaderCount
-        leaderHash = @leaderboardArr[leaders]
-        puts "#{leaders+1}. #{leaderHash[:name]} - WPM: #{leaderHash[:high_score]}, Accuracy: #{leaderHash[:accuracy]}, Worst Character: #{leaderHash[:worst_character]}"
-        leaders += 1
+        leaders = 0 #current number of users displayed on leaderboard
+        while leaders < leaderCount #loop while displayed leaders is less than actual users
+            leaderHash = @leaderboardArr[leaders] #creates new hash using leaders as the index as the highest score would start from index 0
+            puts "#{leaders+1}. #{leaderHash[:name]} - WPM: #{leaderHash[:high_score]}, Accuracy: #{leaderHash[:accuracy]}, Worst Character: #{leaderHash[:worst_character]}" #uses hash to output leaderboards
+            leaders += 1 #increment leaders
         end
     end
 
@@ -122,9 +122,9 @@ class GameController
         else
             countdown = 3 #starts countdown to game
             while countdown>0 do #loops while countown is higher than 0
-            puts countdown
-            countdown -= 1
-            sleep 1 #waits 1 second
+                puts countdown
+                countdown -= 1
+                sleep 1 #waits 1 second
             end
             begin_typing(words) #starts games with chosen number of words
         end
@@ -177,7 +177,7 @@ class GameController
             letterArr.each do |letter| #loop through each letter
                 if !letter_count[letter] #if letter does not exist in hash, add it to hash
                     letter_count[letter] = 1
-                    else
+                else
                     letter_count[letter] += 1 #if letter exists, increment
                 end
             end
