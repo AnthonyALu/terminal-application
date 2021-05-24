@@ -24,22 +24,58 @@
 
 
 # Features
-    - Stores data of multiple users
+    - Stores data of multiple users and user registration/login
         - Saves user data each session so that data can be compared with other users. This data will be saved inside a class variable to be accessed to display leaderboards. 
-    - User login and registration
         - Prevents multiple users from using the same username and ensures that each unique user will have their own username and statistics
-    - Generates random words for you to type
+    - Gameplay - Generates random words for you to type
         - Utilises a randomising Ruby gem to generate random words so that the user won't be able to predict what they are required to type. 
-    - Receives input from user to check words typed
+        - Receives input from user to check words typed
         - Receives the user input then stores the data to calculate the user's statistics later.
-    - Leaderboards for local users
-        - Allows local users to compare scores to see who is faster
-    - Word count that the user will decide for themselves
-        - Some users may prefer to have shorter test while some people would prefer to test their typing over longer periods of time. 
-    - Calculates wpm and accuracy - Wpm will be calculated based on characters per minute then multiplied by 2. The reason it is multiplied by 2 is because unlike normal typing tests, this application uses very random words and requires the user to press the enter button once a word is completed. This reduces the user's speed by about half as they must stop to process the next word they are given. 
-    - Stats of typing test including typing speed and accuracy
+        - Calculates wpm and accuracy - Wpm will be calculated based on characters per minute then multiplied by 2. The reason it is multiplied by 3 is because unlike normal typing tests, this application uses very random words and requires the user to press the enter button once a word is completed. This reduces the user's speed by about half as they must stop to process the next word they are given. 
+        - Stats of typing test including typing speed and accuracy
         - Returns the typing speed in words per minute and displays how accurate the user is with their words.
-    - Tells the user which letters they are the least efficient with
+        - Tells the user which letters they are the least efficient with
         - Returns the top letters included in words that they have typed incorrectly. 
+    - Stats and leaderboards for local users
+        - Allows local users to compare scores to see who is faster
+        - Shows wpm, accuracy, and least accurate characters for up to 3 users
+        - Shows up to 3 users at a time
+    
+# User Interaction and experience
+    - How the user will find out how to interact with / use each feature
+        - Login/Register
+            - User will be prompted to choose whether to log in or register when the application starts. They will be able to choose the option they want with the arrow keys and enter to confirm their option.
+        - Game
+            - User will eventually reach a prompt that says 'Play', where they will be able to select it to play the game. 
+        - Stats and leaderboards
+            - User will see a prompt option for leadboards on the starting screen and a prompt option for stats when they are logged in.
+    - How the user will interact with / use each feature.
+        - Login/Register
+            - Users will use usernames that will hold all their data. By registering a user, a user will be created and stored in the application.
+            - Users will then log in with their user accounts to start playing.
+        - Game
+            - User will first enter how many words they wish to type.
+            - User will then see words that are outputted by the application that they must type out exactly and enter into the application as input.
+            - User will keep repeating this process until they have reached their designated word count.
+        - Stats/Leaderboards
+            - User will check stats to find out which letters they can improve on and their words per minute and accuracy.
+            - If a user beats their personal record, this data will be saved as their new record.
+            - User can check leaderboards for the top scores of local users to compete with others.
+    - How errors will be handled by the application and displayed to the user
+        - Login/Register
+            - If a user attempts to register an account that already exists, the application will tell them that the account already exists by outputting to the terminal.
+            - If a user attempts to login with a user that does not exist, the application will tell them that they must register first by outputting to the terminal. 
+        - Game
+            - If the user attempts to type in an invalid character when asked for how many words they wish to type, the application will tell them to enter a valid character with an example.
+        - Leaderboards
+            - If the user checks the leaderboards when there are none to show, the application will tell the user that no one has played the game.
+
+# Control Flow Diagram
+
+![Flowchart](docs/FlowChart.png)
+
+# Implementation Plan
+
+
 
 
