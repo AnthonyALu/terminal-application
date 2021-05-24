@@ -4,7 +4,7 @@
 # Software Development Plan
 
 ## Description
-    This application is a typing game that will allow users to put their typing skills to the test. In this application, the user will be able to type random words that will be shown on the screen for a given period of time. After the given time period has expired, the user will be given their results. These results will include typing speed, accuracy and the top 3 letters that they are most unfamiliar with on the keyboard. Registration will be required to allow for multiple users to compare results.
+    This application is a typing game that will allow users to put their typing skills to the test. In this application, the user will first decide how many words they wish to attempt to type. The game will then output random words for the user to type, repeating until reaching the designated number of words that the user jas cjpsem/ After the designated number of words are attempted, the user will be given their results. These results will include typing speed, accuracy and the top 3 letters that they are most unfamiliar with on the keyboard. Registration will be required to allow for multiple users to play the game on the same computer. Users can then compare their typing speeds with the leaderboards function.
 
 ## What will it solve?
     In a world where technology is rapidly developing and working from home is very common, there is a high possibility that the average person will need to know how to use a computer. Using a computer will require some basic skills such as typing and navigating with the mouse, but what if a pandemic occurs and someone who is not familiar with the keyboard is forced to work from home? That person will only be able to work as fast as their fingers will allow them to. Touch-typing refers to the practice of using one's fingers to type with a keyboard without using the keys. It is an extremely useful skill to have as it will not only improve productivity but also concentration and general health. This application will help the user with their touch-typing by testing their typing speed and providing feedback on how fast they type and which keys they struggle with most. On the other hand, this application can also be a fun time-waster for competitive people. 
@@ -17,10 +17,10 @@
     2. Use the keyboard to navigation to 'Register' and press enter
     3. Login using the registered name (case-sensitive)
     4. Press enter on the 'Play' option
-    5. Enter how many words you want to type (enter a number larger than 1)
+    5. Enter how many words you want to type (enter a number from 5-500)
     6. Type the words that appear in the terminal
     7. See results when typing is finished
-    8. Play again!
+    8. Play again or log out to check if you have made the leaderboards!
 
 
 # Features
