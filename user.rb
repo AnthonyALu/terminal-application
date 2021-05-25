@@ -9,7 +9,7 @@ class User
     end
 
     def user_details()
-        return {@name => @uid}
+        {@name => @uid}
     end
 
 end

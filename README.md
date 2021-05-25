@@ -1,6 +1,12 @@
 # Source Control repository
     https://github.com/AnthonyALu/terminal-application
 
+# Ruby Gems
+    - Artii - https://github.com/miketierney/artii
+    - tty-prompt - https://github.com/piotrmurach/tty-prompt
+    - Random-word - https://github.com/openlogic/random-word
+    - Colorize - https://github.com/fazibear/colorize
+
 # Software Development Plan
 
 ## Description

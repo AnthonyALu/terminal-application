@@ -1,6 +1,7 @@
 require_relative "../user.rb"
 require_relative "../game_controller.rb"
 
+
 describe GameController do
     before(:each) do
         @controller = GameController.new()

@@ -4,6 +4,7 @@ require "tty-prompt"
 
 class GameController
 
+    #attr_accessor used for testing purposes. App will still run if all variables changed to attr_reader
     attr_accessor :userHashes, :currentUid, :currentUserData, :userData
 
     def initialize()
@@ -38,13 +39,13 @@ class GameController
 
     def attempt_registration(username)
         if @userHashes[username] #check if user exists in @userHashes
-            "You already have an account, please login" #user_register will puts this to the terminal
+            return "You already have an account, please login" #user_register will puts this to the terminal
         else
             user = User.new(username) #creates new user
             newHash = user.user_details #creates a new hash of user values
             @userhashes = @userHashes.merge!(newHash) #adds user to hash 
             @userData << {:name => username, :high_score => 0, :accuracy => 0, :worst_character => "None!"}
-            "Thank you for registering, please login and have fun!" #user_register will puts this to the terminal
+            return "Thank you for registering, please login and have fun!" #user_register will puts this to the terminal
         end
     end
 
@@ -63,9 +64,9 @@ class GameController
         if @userHashes[username] #check if user exists
             @currentUid = @userHashes[username] #update current user id to the username from the userhashes directory
             @currentUserData = @userData[currentUid] #user data hash becomes hash from database
-            "Hello #{currentUserData[:name]}!" #user_login will puts this to terminal
+            return "Hello #{@currentUserData[:name]}!" #user_login will puts this to terminal
         else
-            "You have not registered yet, please register first." #user_login will puts this to terminal
+            return "You have not registered yet, please register first." #user_login will puts this to terminal
         end 
     end
 
@@ -91,13 +92,13 @@ class GameController
     
     def show_stats()
         @currentUserData = @userData[@currentUid] #double check that the stats shown are the highest, this line is used for testing
-        "Name: #{@currentUserData[:name]}, WPM: #{@currentUserData[:high_score]}, Accuracy: #{@currentUserData[:accuracy]}, Least accurate letter: #{@currentUserData[:worst_character]}" #home_screen will puts this to application
+        return "Name: #{@currentUserData[:name]}, WPM: #{@currentUserData[:high_score]}, Accuracy: #{@currentUserData[:accuracy]}, Least accurate letter: #{@currentUserData[:worst_character]}" #home_screen will puts this to application
     end
 
     def home_screen
         entryPrompt = TTY::Prompt.new #creates new prompt
         entryChoices = {Play: 1, Stats: 2, "Log out": 3} #options to choose from
-        choice = entryPrompt.select("Hello #{@currentUser}, what would you like to do?", entryChoices) #receives choice input
+        choice = entryPrompt.select("Hello #{@currentUserData[:name]}, what would you like to do?", entryChoices) #receives choice input
         if choice == 1 #play game selected
             start_game #starts game
         elsif choice == 2 #stats selected
@@ -178,11 +179,11 @@ class GameController
             end
         end
         if letter_count.empty? #check if hash is empty, meaning that they got everything correct
-            "Great job, you got all the words correct!" #calculate_results will puts this to application
+            return "Great job, you got all the words correct!" #calculate_results will puts this to application
         else
             final_letters = letter_count.sort_by {|char, c| c}.reverse #sort hash by descending order
             @currentUserData[:worst_character] = letter_count.max_by{|k, v| v} #change worst character in database to be the key with the highest value
-            "Here are some characters that you may want to practice: #{final_letters[0]}, #{final_letters[1]}, #{final_letters[2]}" #calculate_results will puts this to terminal
+            return "Here are some characters that you may want to practice: #{final_letters[0]}, #{final_letters[1]}, #{final_letters[2]}" #calculate_results will puts this to terminal
         end
     end
 
@@ -197,7 +198,7 @@ class GameController
         wpm = ((wordsNormalized / 3)).round #wpm = characters typed per minute divided by average characters in words. Average is lower to be more accurate because user has to use the enter button and is not typing sentences
         accuracy = (wordsCorrect.size.to_f / totalWordCount.to_f) * 100 #accuracy = correct words / total words
         save_data(wpm, accuracy.to_i) unless wpm < @currentUserData[:high_score]#saves data if user has reached high score
-        "You type #{wpm.to_s.colorize(:green)} word(s) per minute with #{accuracy.to_i}% accuracy!" #returns wpm and accuracy, outputted by calculate_results
+        return "You type #{wpm.to_s.colorize(:green)} word(s) per minute with #{accuracy.to_i}% accuracy!" #returns wpm and accuracy, outputted by calculate_results
     end
 
     def save_data(wpm, accuracy)
