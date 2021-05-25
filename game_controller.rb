@@ -85,7 +85,7 @@ class GameController
         leaders = 0 #current number of users displayed on leaderboard
         while leaders < leaderCount #loop while displayed leaders is less than actual users
             leaderHash = @leaderboardArr[leaders] #creates new hash using leaders as the index as the highest score would start from index 0
-            puts "#{leaders+1}. #{leaderHash[:name]} - WPM: #{leaderHash[:high_score]}, Accuracy: #{leaderHash[:accuracy]}, Worst Character: #{leaderHash[:worst_character]}" #uses hash to output leaderboards
+            puts "#{leaders+1}. #{leaderHash[:name]} - WPM: #{leaderHash[:high_score]}, Accuracy: #{leaderHash[:accuracy]}%, Worst Character: #{leaderHash[:worst_character]}" #uses hash to output leaderboards
             leaders += 1 #increment leaders
         end
     end
@@ -216,4 +216,6 @@ class GameController
         @currentUserData[:accuracy] = accuracy #updates accuracy
         @userData[@currentUid] = @currentUserData #updates database with current user data
     end
+
+
 end
