@@ -5,6 +5,7 @@ require "tty-prompt"
 class GameController
 
     attr_accessor :userHashes, :currentUid, :currentUserData, :userData
+
     def initialize()
     @userData = [] #database of user hashes
     @userHashes = {} #stores indexes for all users
@@ -16,7 +17,7 @@ class GameController
     def start_screen()
         startChoices = {Login: 1, "New User": 2, Leaderboards: 3, Exit: 4} #Options for starting screen
         startPrompt = TTY::Prompt.new #creates new prompt
-        choice = startPrompt.select("Welcome to Type Champion", startChoices) #receive input for prompt
+        choice = startPrompt.select("Welcome to Type King", startChoices) #receive input for prompt
         if choice == 1 #user picked Login
             user_login
         elsif choice == 2 #user picked New User
@@ -37,13 +38,13 @@ class GameController
 
     def attempt_registration(username)
         if @userHashes[username] #check if user exists in @userHashes
-            return "You already have an account, please login"
+            "You already have an account, please login" #user_register will puts this to the terminal
         else
             user = User.new(username) #creates new user
             newHash = user.user_details #creates a new hash of user values
             @userhashes = @userHashes.merge!(newHash) #adds user to hash 
             @userData << {:name => username, :high_score => 0, :accuracy => 0, :worst_character => "None!"}
-            return "Thank you for registering, please login and have fun!"
+            "Thank you for registering, please login and have fun!" #user_register will puts this to the terminal
         end
     end
 
@@ -62,28 +63,12 @@ class GameController
         if @userHashes[username] #check if user exists
             @currentUid = @userHashes[username] #update current user id to the username from the userhashes directory
             @currentUserData = @userData[currentUid] #user data hash becomes hash from database
-            return "Hello #{currentUserData[:name]}!"
+            "Hello #{currentUserData[:name]}!" #user_login will puts this to terminal
         else
-            return "You have not registered yet, please register first."
+            "You have not registered yet, please register first." #user_login will puts this to terminal
         end 
     end
 
-    def show_leaderboards
-        @leaderboardArr = @userData.dup #creates a new duplicate array of all user data
-        if @leaderboardArr.count > 0 #checks if array of users 
-            @leaderboardArr.sort_by!{|w| w[:high_score]} #sort by ascending order
-            @leaderboardArr = @leaderboardArr.reverse #reverse order to descending
-            leaderCount = @leaderboardArr.count #checks how many users are in the array
-            if leaderCount > 2
-                display_leaders(3) #shows a maximum of 3 leaders
-            else
-                display_leaders(leaderCount) #calls method based on number of users
-            end
-        else
-            puts "No entries yet!" #no users in data
-        end
-        start_screen #return to starting screen
-    end
 
     def display_leaders(leaderCount)
         leaders = 0 #current number of users displayed on leaderboard
@@ -94,9 +79,19 @@ class GameController
         end
     end
 
+    def show_leaderboards
+        @leaderboardArr = @userData.dup #creates a new duplicate array of all user data
+        puts "No entries yet!" unless @leaderboardArr.count > 0 #output when no users in data
+        @leaderboardArr.sort_by!{|w| w[:high_score]} #sort by ascending order
+        @leaderboardArr = @leaderboardArr.reverse #reverse order to descending
+        leaderCount = @leaderboardArr.count #checks how many users are in the array
+        display_leaders(leaderCount) #calls method based on number of users
+        start_screen #return to starting screen
+    end
+    
     def show_stats()
-        @currentUserData = @userData[@currentUid] #double check that the stats shown are the highest/used for testing
-        return "Name: #{@currentUserData[:name]}, WPM: #{@currentUserData[:high_score]}, Accuracy: #{@currentUserData[:accuracy]}, Least accurate letter: #{@currentUserData[:worst_character]}"
+        @currentUserData = @userData[@currentUid] #double check that the stats shown are the highest, this line is used for testing
+        "Name: #{@currentUserData[:name]}, WPM: #{@currentUserData[:high_score]}, Accuracy: #{@currentUserData[:accuracy]}, Least accurate letter: #{@currentUserData[:worst_character]}" #home_screen will puts this to application
     end
 
     def home_screen
@@ -121,7 +116,7 @@ class GameController
             start_game #restarts method
         else
             countdown = 3 #starts countdown to game
-            while countdown>0 do #loops while countown is higher than 0
+            while countdown > 0  #loops while countown is higher than 0
                 puts countdown
                 countdown -= 1
                 sleep 1 #waits 1 second
@@ -175,7 +170,7 @@ class GameController
             word = word.red.uncolorize #uncolorize to remove colorize characters
             letterArr = word.split("") #split word into array of letters
             letterArr.each do |letter| #loop through each letter
-                if !letter_count[letter] #if letter does not exist in hash, add it to hash
+                if !letter_count[letter] #if letter value is nil, add it to hash
                     letter_count[letter] = 1
                 else
                     letter_count[letter] += 1 #if letter exists, increment
@@ -183,11 +178,11 @@ class GameController
             end
         end
         if letter_count.empty? #check if hash is empty, meaning that they got everything correct
-            return "Great job, you got all the words correct!"
+            "Great job, you got all the words correct!" #calculate_results will puts this to application
         else
             final_letters = letter_count.sort_by {|char, c| c}.reverse #sort hash by descending order
             @currentUserData[:worst_character] = letter_count.max_by{|k, v| v} #change worst character in database to be the key with the highest value
-            return "Here are some characters that you may want to practice: #{final_letters[0]}, #{final_letters[1]}, #{final_letters[2]}"
+            "Here are some characters that you may want to practice: #{final_letters[0]}, #{final_letters[1]}, #{final_letters[2]}" #calculate_results will puts this to terminal
         end
     end
 
@@ -200,19 +195,14 @@ class GameController
         timeMultiplier = 60 / elapsedTime  #creates a multiplier to set typing rate to words per minute
         wordsNormalized = charactersTyped * timeMultiplier #converts characters typed to characters per minute
         wpm = ((wordsNormalized / 3)).round #wpm = characters typed per minute divided by average characters in words. Average is lower to be more accurate because user has to use the enter button and is not typing sentences
-        accuracy = (wordsCorrect.count.to_f / totalWordCount.to_f) * 100 #accuracy = correct words / total words
-        save_data(wpm, accuracy.to_i) #saves data if user has reached high score
-        return "You type #{wpm.to_s.colorize(:green)} word(s) per minute with #{accuracy.to_i}% accuracy!" #returns wpm and accuracy
+        accuracy = (wordsCorrect.size.to_f / totalWordCount.to_f) * 100 #accuracy = correct words / total words
+        save_data(wpm, accuracy.to_i) unless wpm < @currentUserData[:high_score]#saves data if user has reached high score
+        "You type #{wpm.to_s.colorize(:green)} word(s) per minute with #{accuracy.to_i}% accuracy!" #returns wpm and accuracy, outputted by calculate_results
     end
 
     def save_data(wpm, accuracy)
-        if wpm > @currentUserData[:high_score]
-            #save data if user reaches new high score
-            @currentUserData[:high_score] = wpm #updates highest wpm
-            @currentUserData[:accuracy] = accuracy #updates accuracy
-            @userData[@currentUid] = @currentUserData #updates database with current user data
-        else
-            #do not save data
-        end
+        @currentUserData[:high_score] = wpm #updates highest wpm
+        @currentUserData[:accuracy] = accuracy #updates accuracy
+        @userData[@currentUid] = @currentUserData #updates database with current user data
     end
 end

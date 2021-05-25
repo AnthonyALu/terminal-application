@@ -52,4 +52,8 @@ describe GameController do
         expect(@controller.attempt_login("alex")). to eq("You have not registered yet, please register first.")
     end
 
+    it "should display stats" do
+        expect(@controller.show_stats).to eq("Name: Bob, WPM: 0, Accuracy: 0, Least accurate letter: None!")
+    end
+
 end

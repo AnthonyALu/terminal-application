@@ -76,6 +76,46 @@
 
 # Implementation Plan
 
+![GanttChart](docs/Screenshots/GanttChart1.png)
+![GanttChart](docs/Screenshots/GanttChart2.png)
+![Features](docs/Screenshots/Registration.png)
+![Features](docs/Screenshots/Login.png)
+![Features](docs/Screenshots/Leaderboards.png)
+![Features](docs/Screenshots/Gameplay.png)
+![Features](docs/Screenshots/Gameplay2.png)
+
+ - Features
+    - Registration
+        1. Create User Class that will be responsible for creating new users.
+        2. Create GameController Class that will be responsible for storing data of users.
+        3. Create a method to allow users to register an account with a username.
+        4. Create a method that will attempt registration and to store data if applicable.
+        5. Prevent user from registering if an account already exists by checking existing user base.
+        6. Create tests and check for errors.
+    - Login
+        1. Create a method that allows the user to login with a username by checking if it exists in user base.
+        2. Prevents user from logging in if the user does not exist.
+        3. Accesses use data of current user in GameController Class and make that the current user data.
+        4. Allows the user to log out by returning to home screen.
+        5. Create tests and check for errors.
+    - Gameplay
+        1. Create a method to start game by asking user how many words they want to attempt to type.
+        2. Generate a random word using a Ruby Gem and output it to the terminal. 
+        3. Receives user input and matches it with previous word generated.
+        4. Add correct words to an array and incorrect words to a different array. 
+        5. Create a method that calculate the statistics when the game finishes.
+        6. Calculates Words per Minute of user by using correct word array to find characters typed and normalise it into words per minute.
+        7. Calculates accuracy of user by dividing correct words by total words.
+        8. Calculates least efficient characters by breaking up incorrect words array and counting incorrect characters.
+        9. Saves statistics if the Words per Minute score is higher than the previous score.
+    - Leaderboards/Statistics
+        1. Create array in Gamecontroller Class that holds all user scores and data.
+        2. Sorts user array by descending order under words per minute value. 
+        3. Create a hash for each of the top 3 users by words per minute.
+        4. Create a method that displays leaderboards for up to 3 users by using if statements to check how many users must be displayed. 
+        5. Leaderboard method prints user name, wpm, accuracy and worst character of each user. 
+        6. Create a method that shows statistics of user including name, wpm, accuracy and 3 worst characters.
+        7. Create tests and check for errors. 
 
 
 
