@@ -84,11 +84,17 @@
 
 ![GanttChart](docs/Screenshots/GanttChart1.png)
 ![GanttChart](docs/Screenshots/GanttChart2.png)
-![Features](docs/Screenshots/Registration.png)
-![Features](docs/Screenshots/Login.png)
-![Features](docs/Screenshots/Leaderboards.png)
-![Features](docs/Screenshots/Gameplay.png)
-![Features](docs/Screenshots/Gameplay2.png)
+![Features](docs/Screenshots/Registration_Complete.png)
+![Features](docs/Screenshots/Registration_Log.png)
+![Features](docs/Screenshots/Login_Complete.png)
+![Features](docs/Screenshots/Login_Log.png)
+![Features](docs/Screenshots/Gameplay_Complete.png)
+![Features](docs/Screenshots/Gameplay_Log.png)
+![Features](docs/Screenshots/Leaderboards_Complete.png)
+![Features](docs/Screenshots/Leaderboards_Log.png)
+![Features](docs/Screenshots/GanttChart_Complete.png)
+![Features](docs/Screenshots/GanttChart_Complete2.png)
+![Features](docs/Screenshots/Trello_Complete.png)
 
  - Features
     - Registration
