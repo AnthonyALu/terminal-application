@@ -15,8 +15,8 @@ class GameController
     @leaderboardArr = []
     end
 
-    def start_screen()
-        startChoices = {Login: 1, "New User": 2, Leaderboards: 3, Exit: 4} #Options for starting screen
+    def start_screen
+        startChoices = {Login: 1, "New User": 2, Leaderboards: 3, Help: 4, Exit: 5} #Options for starting screen
         startPrompt = TTY::Prompt.new #creates new prompt
         choice = startPrompt.select("Welcome to Type King", startChoices) #receive input for prompt
         if choice == 1 #user picked Login
@@ -25,9 +25,19 @@ class GameController
              user_register
         elsif choice == 3 #user picked Leaderboards
             show_leaderboards
+        elsif choice == 4
+            help
+            start_screen
         else #user picked exit
             puts "Thank you for playing!"   
         end
+    end
+
+    def help
+        puts "1. Register"
+        puts "2. Login"
+        puts "3. Play"
+        puts "4. Check your stats"
     end
 
     def user_register
@@ -90,7 +100,7 @@ class GameController
         start_screen #return to starting screen
     end
     
-    def show_stats()
+    def show_stats
         @currentUserData = @userData[@currentUid] #double check that the stats shown are the highest, this line is used for testing
         return "Name: #{@currentUserData[:name]}, WPM: #{@currentUserData[:high_score]}, Accuracy: #{@currentUserData[:accuracy]}, Least accurate letter: #{@currentUserData[:worst_character]}" #home_screen will puts this to application
     end
