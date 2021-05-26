@@ -14,7 +14,6 @@ class GameController
     @currentUserData = {} #stores current stats
     @currentUid = 0 #current user id
     @leaderboardArr = []
-    setup_application
     end
 
     def setup_application
