@@ -1,6 +1,7 @@
 require "random-word"
-require 'colorize'
+require "colorize"
 require "tty-prompt"
+require "artii"
 
 class GameController
 
@@ -13,6 +14,13 @@ class GameController
     @currentUserData = {} #stores current stats
     @currentUid = 0 #current user id
     @leaderboardArr = []
+    print_title
+    end
+
+    def print_title
+        system("clear") #clears terminal
+        artOpts = Artii::Base.new :font => 'slant' #create artii options using Artii Ruby gem
+        puts artOpts.asciify('Type King').colorize(:blue) #apply artii style to string to output to the application
     end
 
     def start_screen
