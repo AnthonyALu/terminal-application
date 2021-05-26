@@ -1,5 +1,6 @@
 # Source Control repository
-    https://github.com/AnthonyALu/terminal-application
+    Source code - https://github.com/AnthonyALu/terminal-application
+    Ruby Gem - https://github.com/AnthonyALu/typeking
 
 # Ruby Gems
     - Artii - https://github.com/miketierney/artii
@@ -19,7 +20,7 @@
     The target audience consists of students, workers and anyone looking to increase their typing skills. The internet has contributed to the way we communicate and work significantly. Because of this, the target audience is broad as anyone can benefit from learning to type with better speed and accuracy.
 
 ## How do I use this application?
-    1. Start the application
+    1. Run the application by using the 'run_app.sh' file or by running 'ruby index.rb' in the terminal
     2. Use the keyboard to navigation to 'Register' and press enter
     3. Login using the registered name (case-sensitive)
     4. Press enter on the 'Play' option
@@ -37,7 +38,7 @@
         - Utilises a randomising Ruby gem to generate random words so that the user won't be able to predict what they are required to type. 
         - Receives input from user to check words typed
         - Receives the user input then stores the data to calculate the user's statistics later.
-        - Calculates wpm and accuracy - Wpm will be calculated based on characters per minute then multiplied by 2. The reason it is multiplied by 3 is because unlike normal typing tests, this application uses very random words and requires the user to press the enter button once a word is completed. This reduces the user's speed by about half as they must stop to process the next word they are given. 
+        - Calculates wpm and accuracy - Wpm will be calculated based on characters per minute then divided by 3. The reason it is divided by 3 is because an average word is about 5 characters and unlike normal typing tests, this application uses very random words and requires the user to press the enter button once a word is completed. This reduces the user's speed by about half as they must stop to process the next word they are given. 
         - Stats of typing test including typing speed and accuracy
         - Returns the typing speed in words per minute and displays how accurate the user is with their words.
         - Tells the user which letters they are the least efficient with
@@ -129,5 +130,19 @@
         6. Create a method that shows statistics of user including name, wpm, accuracy and 3 worst characters.
         7. Create tests and check for errors. 
 
-
+# Help
+    - Steps to install the application
+        1. Download the source file from the repository - https://github.com/AnthonyALu/terminal-application
+        2. Open the Terminal app and navigate to the directory of the file
+        3. Type 'ruby index.rb' or run the bash file using 'bash run_app.sh'
+    - Steps to install the gem
+        1. Install the gem with 'gem install typeking'
+        2. Enter IRB in the terminal
+        3. Type 'require typeking'
+        4. Type 'Typeking::GameController.new()' to start the application
+    - Dependencies
+        - gem "colorize", "~> 0.8.1"
+        - gem "artii", "~> 2.1.2"
+        - gem "tty-prompt", "~> 0.23.1"
+        - gem "random-word", "~> 2.1.1"
 
