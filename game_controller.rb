@@ -143,7 +143,7 @@ class GameController
         wordsPrompt = TTY::Prompt.new #creates new prompt
         words = wordsPrompt.ask("How many words do you want to type? (enter a number between 5 and 500)", default: 60) #asks user for number of words they would like to type. If no input, defaults to 30
         if words.to_i < 5 || words.to_i > 499 #checks if entry is in range
-            puts "Invalid entry, please enter a number larger than 5 and smaller than 500"
+            puts "Invalid entry, please enter a number larger than 4 and smaller than 500"
             start_game #restarts method
         else
             countdown = 3 #starts countdown to game
